@@ -1,0 +1,106 @@
+<mxfile host="Electron" modified="2023-11-01T16:19:09.693Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/22.0.3 Chrome/114.0.5735.289 Electron/25.8.4 Safari/537.36" etag="vnBvBXX-K4mmyFjKbEXL" version="22.0.3" type="device">
+  <diagram id="C5RBs43oDa-KdzZeNtuy" name="Page-1">
+    <mxGraphModel dx="1036" dy="614" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="WIyWlLk6GJQsqaUBKTNV-0" />
+        <mxCell id="WIyWlLk6GJQsqaUBKTNV-1" parent="WIyWlLk6GJQsqaUBKTNV-0" />
+        <mxCell id="C8Z5YH-OCvjrJcUlOWDJ-22" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" parent="WIyWlLk6GJQsqaUBKTNV-1" source="C8Z5YH-OCvjrJcUlOWDJ-0" target="C8Z5YH-OCvjrJcUlOWDJ-21" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="C8Z5YH-OCvjrJcUlOWDJ-23" value="利用买方公钥" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" parent="C8Z5YH-OCvjrJcUlOWDJ-22" vertex="1" connectable="0">
+          <mxGeometry x="0.1138" y="4" relative="1" as="geometry">
+            <mxPoint y="-24" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="C8Z5YH-OCvjrJcUlOWDJ-24" value="调用加密P2P下载链接" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" parent="C8Z5YH-OCvjrJcUlOWDJ-22" vertex="1" connectable="0">
+          <mxGeometry x="0.1754" y="-1" relative="1" as="geometry">
+            <mxPoint x="6" y="11" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="C8Z5YH-OCvjrJcUlOWDJ-0" value="卖方" style="rounded=1;whiteSpace=wrap;html=1;" parent="WIyWlLk6GJQsqaUBKTNV-1" vertex="1">
+          <mxGeometry x="640" y="360" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="C8Z5YH-OCvjrJcUlOWDJ-7" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" parent="WIyWlLk6GJQsqaUBKTNV-1" source="C8Z5YH-OCvjrJcUlOWDJ-1" target="C8Z5YH-OCvjrJcUlOWDJ-6" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="C8Z5YH-OCvjrJcUlOWDJ-1" value="买方" style="rounded=1;whiteSpace=wrap;html=1;" parent="WIyWlLk6GJQsqaUBKTNV-1" vertex="1">
+          <mxGeometry x="60" y="240" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="C8Z5YH-OCvjrJcUlOWDJ-10" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="WIyWlLk6GJQsqaUBKTNV-1" source="C8Z5YH-OCvjrJcUlOWDJ-6" target="C8Z5YH-OCvjrJcUlOWDJ-9" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="C8Z5YH-OCvjrJcUlOWDJ-11" value="监听" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" parent="C8Z5YH-OCvjrJcUlOWDJ-10" vertex="1" connectable="0">
+          <mxGeometry x="0.0867" y="2" relative="1" as="geometry">
+            <mxPoint x="1" y="12" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="uja3DEmaoFgimkzrDmjp-1" value="是" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="C8Z5YH-OCvjrJcUlOWDJ-10">
+          <mxGeometry x="-0.38" y="2" relative="1" as="geometry">
+            <mxPoint x="11" y="-18" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="C8Z5YH-OCvjrJcUlOWDJ-25" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="WIyWlLk6GJQsqaUBKTNV-1" source="C8Z5YH-OCvjrJcUlOWDJ-6" target="C8Z5YH-OCvjrJcUlOWDJ-1" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="130" y="180" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="330" y="180" />
+              <mxPoint x="120" y="180" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="uja3DEmaoFgimkzrDmjp-2" value="否" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="C8Z5YH-OCvjrJcUlOWDJ-25">
+          <mxGeometry x="-0.1162" relative="1" as="geometry">
+            <mxPoint x="-9" y="-20" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="C8Z5YH-OCvjrJcUlOWDJ-6" value="付款" style="rhombus;whiteSpace=wrap;html=1;" parent="WIyWlLk6GJQsqaUBKTNV-1" vertex="1">
+          <mxGeometry x="290" y="230" width="80" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="C8Z5YH-OCvjrJcUlOWDJ-13" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="WIyWlLk6GJQsqaUBKTNV-1" source="C8Z5YH-OCvjrJcUlOWDJ-9" target="C8Z5YH-OCvjrJcUlOWDJ-12" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="C8Z5YH-OCvjrJcUlOWDJ-14" value="发回买方公钥" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" parent="C8Z5YH-OCvjrJcUlOWDJ-13" vertex="1" connectable="0">
+          <mxGeometry x="-0.0233" relative="1" as="geometry">
+            <mxPoint y="-10" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="C8Z5YH-OCvjrJcUlOWDJ-9" value="合约端" style="shape=parallelogram;perimeter=parallelogramPerimeter;whiteSpace=wrap;html=1;fixedSize=1;" parent="WIyWlLk6GJQsqaUBKTNV-1" vertex="1">
+          <mxGeometry x="420" y="240" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="C8Z5YH-OCvjrJcUlOWDJ-19" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" parent="WIyWlLk6GJQsqaUBKTNV-1" source="C8Z5YH-OCvjrJcUlOWDJ-12" target="C8Z5YH-OCvjrJcUlOWDJ-0" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="C8Z5YH-OCvjrJcUlOWDJ-20" value="发回" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" parent="C8Z5YH-OCvjrJcUlOWDJ-19" vertex="1" connectable="0">
+          <mxGeometry x="-0.24" y="-1" relative="1" as="geometry">
+            <mxPoint x="-19" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="C8Z5YH-OCvjrJcUlOWDJ-12" value="前端" style="shape=parallelogram;perimeter=parallelogramPerimeter;whiteSpace=wrap;html=1;fixedSize=1;" parent="WIyWlLk6GJQsqaUBKTNV-1" vertex="1">
+          <mxGeometry x="640" y="240" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="C8Z5YH-OCvjrJcUlOWDJ-28" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" parent="WIyWlLk6GJQsqaUBKTNV-1" source="C8Z5YH-OCvjrJcUlOWDJ-21" target="C8Z5YH-OCvjrJcUlOWDJ-27" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="C8Z5YH-OCvjrJcUlOWDJ-29" value="接收" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" parent="C8Z5YH-OCvjrJcUlOWDJ-28" vertex="1" connectable="0">
+          <mxGeometry x="0.0756" y="2" relative="1" as="geometry">
+            <mxPoint y="-22" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="C8Z5YH-OCvjrJcUlOWDJ-21" value="开源加密算法" style="rounded=0;whiteSpace=wrap;html=1;" parent="WIyWlLk6GJQsqaUBKTNV-1" vertex="1">
+          <mxGeometry x="350" y="360" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="C8Z5YH-OCvjrJcUlOWDJ-30" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=1;entryDx=0;entryDy=0;" parent="WIyWlLk6GJQsqaUBKTNV-1" source="C8Z5YH-OCvjrJcUlOWDJ-27" target="C8Z5YH-OCvjrJcUlOWDJ-1" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="C8Z5YH-OCvjrJcUlOWDJ-31" value="返回加密后的下载链接" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" parent="C8Z5YH-OCvjrJcUlOWDJ-30" vertex="1" connectable="0">
+          <mxGeometry x="-0.0347" y="-3" relative="1" as="geometry">
+            <mxPoint y="-7" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="C8Z5YH-OCvjrJcUlOWDJ-27" value="前端" style="shape=parallelogram;perimeter=parallelogramPerimeter;whiteSpace=wrap;html=1;fixedSize=1;" parent="WIyWlLk6GJQsqaUBKTNV-1" vertex="1">
+          <mxGeometry x="60" y="360" width="120" height="60" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
