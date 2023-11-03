@@ -84,7 +84,7 @@ Competitors: file coin, Ocean
 
 advantages: all the above are not mean to do a literally personal data market, though they having some technical advantages, but       
 
-they are complex to implement and hard to operate. We are simplify are mode and lead to an available business model.
+they are complex to implement and hard to operate. We are simplify their mode and lead to an available business model.
 
 
 
