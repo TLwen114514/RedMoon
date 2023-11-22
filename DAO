@@ -125,7 +125,7 @@ contract DAO {
                 undecidedProposal.pop();
             }
         }
-        return true;
+        return _isDataTrue;
     }
 
     struct showStruct {
