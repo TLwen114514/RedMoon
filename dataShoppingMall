@@ -2,43 +2,44 @@
 pragma solidity ^0.8.0;
 
 contract DataShoppingMall{
-/**
-DataListForSeler 记录卖家卖的商品信息
+/**AddressOfDeployer 合约部署者
+Map_NumberToData 记录卖家上传的商品信息
 DaoOrganizationAddress 不变，可信Dao地址
-NumberOfData 总订单号
+NumberOfData 总订单数量
+lastest10 最新10个的数据
+LastestData 最新1个的下标
 */
-//address DaoOrganizationAddress = 等待确认
-mapping(address => mapping(uint256 => Data)) public DataListForSeler;
+address DaoOrganizationAddress;
+address AddressOfDeployer = msg.sender;
+uint256  public  NumberOfTotalData;
+mapping(address => mapping(uint256 => Data)) public Map_NumberToData;
+mapping(address => mapping(uint256 => DataAttribute)) public Map_NumberToDataAttribute;
+mapping(uint256 => Data) public Map_NumberOfData;
+mapping (address => uint256[]) public Map_addressTOBrbitratingdataNumber;
+mapping (address => uint256[]) public Map_selleraddressTOdataNumber;
+mapping (address => uint256[]) public Map_CustomeraddressTOdataNumber;
+uint256[] Type0;
+uint256[] Type1;
+uint256[] Type2;
+uint256[] Type3;
 
-uint256 public  NumberOfTotalData;
+
     constructor() payable {
-
     }
-    /**
-    商品结构体
+   
+/**
+    商品展示结构体(全商家上传信息)
 @Owner
 @NameOfData   个体订单号
 @ValueOfData
 @PhotoOfData
 @TypesOfData  预分类
 @IntroduceOfData
-@BondOfData
 @Linkhash
-@TotalCustomer  总售出量
-
-@CustomerList   保存顾客地址数组
-@EncodeLinkList 对应加密链接数组                          两者个构成一个 address => string
-
-@CustomerTimeList  记录锁币时间数组(卖家发货开始计算 一天)
-@NewSubscriptOfsend         记录最新一个未发送顾客的下标
-@NewSubscriptOfCustomerList 记录最新一个未提币顾客的下标
-@Timestamp  上架时间
 @IsLockByDao 
 @IsLockBySeller
-@SelfDistroytime 下架倒计时一天
-@AddressOfComplaint 质疑顾客
 */
-    struct Data{
+struct Data{
         address Owner;
         uint256 NumberOfData;
         string NameOfData;
@@ -46,55 +47,102 @@ uint256 public  NumberOfTotalData;
         string PhotoOfData;
         bool[4] TypesOfData;
         string IntroduceOfData;
-        uint256 BondOfData;
         string Linkhash;
+        bool IsLockByDao;
+        bool IsLockBySeller;
+    } 
+/**
+    商品属性结构体
+@Owner
+@BondOfData
+@TotalCustomer  总售出量
+@CustomerList   保存顾客地址数组
+@EncodeLinkList 对应加密链接数组                          两者个构成一个 address => string
+@CustomerTimeList  记录锁币时间数组(卖家发货开始计算 一天)
+@NewSubscriptOfsend         记录最新一个未发送link顾客的下标
+@NewSubscriptOfCustomerList 记录最新一个未提币顾客的下标
+@Timestamp  上架时间
+@SelfDistroytime 下架倒计时一天
+@AddressOfComplaint 质疑顾客
+@IsLockByDao 
+@IsLockBySeller
+*/
+    struct DataAttribute{
+        address Owner;
+        uint256 BondOfData;
         uint256 TotalCustomer;
         address[] CustomerList;
         string[] EncodeLinkList;
         uint256 NewSubscriptOfCustomerList;
+        uint256 Timestamp;
         uint256[] CustomerTimeList;
         uint256 NewSubscriptOfsend;
-        uint256 Timestamp;
-        bool IsLockByDao;
-        bool IsLockBySeller;
         uint256 SelfDistroytime;
         address AddressOfComplaint;
     }
-    Data data;
-    //上架功能
+
+    //保存dao地址
+    function CommodityListing(
+        address  _DaoOrganizationAddress
+    )external returns(bool)
+    {
+        require(msg.sender == AddressOfDeployer);
+        DaoOrganizationAddress = _DaoOrganizationAddress;
+
+    }
+
+    //卖家上架
     function CommodityListing(
         string memory _NameOfData,
         uint256  _ValueOfData,
         string memory _PhotoOfData,
         bool[4] memory _TypesOfData,
         string memory _IntroduceOfData,
-        uint256  _BondOfData,
-        string memory _Linkhash
+        string memory _Linkhash,
+        uint256  _BondOfData
         )
         payable  external returns(bool)
         {
-            require(msg.value == _BondOfData && msg.value == _ValueOfData*10, "not enough Bond");
-            //结构体初始化
-            Data storage _data = data;
-            //加入映射再更改值
-            _data = DataListForSeler[msg.sender][NumberOfTotalData];
-            NumberOfTotalData++;
-            _data.Owner = msg.sender;
-            _data.NumberOfData = NumberOfTotalData;
-            NumberOfTotalData++;             
-            _data.NameOfData = _NameOfData;
-            _data.ValueOfData = _ValueOfData;
-            _data.PhotoOfData = _PhotoOfData;
-            _data.TypesOfData = _TypesOfData;
-            _data.IntroduceOfData = _IntroduceOfData;
-            _data.BondOfData = _BondOfData;
-            _data.Linkhash = _Linkhash;
-            _data.CustomerList;
-            _data.NewSubscriptOfCustomerList;
-            _data.Timestamp = block.timestamp;
-            _data.IsLockByDao;
-            _data.IsLockBySeller;
-            _data.SelfDistroytime;
+
+            require(msg.value == _BondOfData && _BondOfData == _ValueOfData*10, "not enough Bond");
+//            Map_NumberToData[msg.sender][NumberOfTotalData] = (msg.sender,_NameOfData,_ValueOfData,_PhotoOfData,_TypesOfData,_IntroduceOfData);
+        Map_NumberToData[msg.sender][NumberOfTotalData].Owner = msg.sender;
+        Map_NumberToData[msg.sender][NumberOfTotalData].NameOfData = _NameOfData;
+        Map_NumberToData[msg.sender][NumberOfTotalData].ValueOfData = _ValueOfData;
+        Map_NumberToData[msg.sender][NumberOfTotalData].PhotoOfData = _PhotoOfData;
+        Map_NumberToData[msg.sender][NumberOfTotalData].TypesOfData = _TypesOfData;
+        Map_NumberToData[msg.sender][NumberOfTotalData].IntroduceOfData = _IntroduceOfData;
+        Map_NumberToData[msg.sender][NumberOfTotalData].Linkhash = _Linkhash;
+        //加入映射
+        Map_NumberOfData[NumberOfTotalData].Owner = msg.sender;
+        Map_NumberOfData[NumberOfTotalData].NameOfData = _NameOfData;
+        Map_NumberOfData[NumberOfTotalData].ValueOfData = _ValueOfData;
+        Map_NumberOfData[NumberOfTotalData].PhotoOfData = _PhotoOfData;
+        Map_NumberOfData[NumberOfTotalData].TypesOfData = _TypesOfData;
+        Map_NumberOfData[NumberOfTotalData].IntroduceOfData = _IntroduceOfData;
+        Map_NumberOfData[NumberOfTotalData].Linkhash = _Linkhash;
+        //加入分类
+        if(_TypesOfData[0] = true){
+            Type0.push(NumberOfTotalData);
+        }
+         if(_TypesOfData[1] = true){
+            Type1.push(NumberOfTotalData);
+        }
+         if(_TypesOfData[2] = true){
+            Type2.push(NumberOfTotalData);
+        }
+         if(_TypesOfData[3] = true){
+            Type3.push(NumberOfTotalData);
+        }
+
+            //初始化DataAttribute结构体
+//            Map_NumberToDataAttribute[msg.sender][NumberOfTotalData] = (msg.sender,NumberOfTotalData,_BondOfData,,,,,,,,,,,);
+        Map_NumberToDataAttribute[msg.sender][NumberOfTotalData].Owner = msg.sender;
+        Map_NumberToDataAttribute[msg.sender][NumberOfTotalData].BondOfData = _BondOfData;
+        //添加卖出者到订单的映射
+        Map_selleraddressTOdataNumber[msg.sender].push(NumberOfTotalData);
+        NumberOfTotalData++;
+        
         return true;
     }
 
@@ -105,12 +153,14 @@ uint256 public  NumberOfTotalData;
         uint256 _NumberOfData
     )payable  external returns(bool){
         //购买条件确认
-        require(msg.value == DataListForSeler[_Owner][_NumberOfData].ValueOfData, "you do not pay enough money");
-        require(DataListForSeler[_Owner][_NumberOfData].IsLockByDao == true, "this data is lock by dao");
-        require(DataListForSeler[_Owner][_NumberOfData].IsLockBySeller == true, "this data is lock by seller");
+        require(msg.value == Map_NumberToData[_Owner][_NumberOfData].ValueOfData, "you do not pay enough money");
+        require(Map_NumberToData[_Owner][_NumberOfData].IsLockByDao == true, "this data is lock by dao");
+        require(Map_NumberToData[_Owner][_NumberOfData].IsLockBySeller == true, "this data is lock by seller");
         //添加买家地址到购买者名单中
-    DataListForSeler[_Owner][_NumberOfData].CustomerList.push(msg.sender);
-    DataListForSeler[_Owner][_NumberOfData].TotalCustomer++;
+    Map_NumberToDataAttribute[_Owner][_NumberOfData].CustomerList.push(msg.sender);
+    //添加购买者者到订单的映射
+    Map_CustomeraddressTOdataNumber[msg.sender].push(_NumberOfData);
+    Map_NumberToDataAttribute[_Owner][_NumberOfData].TotalCustomer++;
     return true;
     }
 
@@ -122,13 +172,13 @@ uint256 public  NumberOfTotalData;
     )external returns(bool)
     {
       //上传链接到CustomerList并开始锁币倒计时
-      uint256 _NewSubscriptOfsend = DataListForSeler[msg.sender][_NumberOfData].NewSubscriptOfsend;
+      uint256 _NewSubscriptOfsend = Map_NumberToDataAttribute[msg.sender][_NumberOfData].NewSubscriptOfsend;
       for(uint i = _NewSubscriptOfsend;_NewSubscriptOfsend <= EncodeLink.length-1;_NewSubscriptOfsend++){
-        DataListForSeler[msg.sender][_NumberOfData].EncodeLinkList[_NewSubscriptOfsend] = EncodeLink[_NewSubscriptOfsend];
-        DataListForSeler[msg.sender][_NumberOfData].CustomerTimeList.push(block.timestamp);
+        Map_NumberToDataAttribute[msg.sender][_NumberOfData].EncodeLinkList[_NewSubscriptOfsend] = EncodeLink[_NewSubscriptOfsend];
+        Map_NumberToDataAttribute[msg.sender][_NumberOfData].CustomerTimeList.push(block.timestamp);
         }
         //更新发送下标
-        DataListForSeler[msg.sender][_NumberOfData].NewSubscriptOfsend = _NewSubscriptOfsend;
+        Map_NumberToDataAttribute[msg.sender][_NumberOfData].NewSubscriptOfsend = _NewSubscriptOfsend;
         return true;
     }
 
@@ -136,25 +186,26 @@ uint256 public  NumberOfTotalData;
     function ReleaseLockmoney(
         uint _NumberOfData
     )payable  external returns(bool){
-       require(DataListForSeler[msg.sender][_NumberOfData].IsLockByDao == false, "data is arbitrating");
+       require(Map_NumberToData[msg.sender][_NumberOfData].IsLockByDao == false, "data is lock by dao");
        uint _NumberOfMoney;
-       if(DataListForSeler[msg.sender][_NumberOfData].IsLockBySeller == true && block.timestamp - DataListForSeler[msg.sender][_NumberOfData].SelfDistroytime > 86400)
+       if(Map_NumberToData[msg.sender][_NumberOfData].IsLockBySeller == true && block.timestamp - Map_NumberToDataAttribute[msg.sender][_NumberOfData].SelfDistroytime > 86400)
        {
         _NumberOfMoney = 10;
         //防止重入
-        DataListForSeler[msg.sender][_NumberOfData].IsLockByDao = true;
+        Map_NumberToData[msg.sender][_NumberOfData].IsLockByDao = true;
        }
-       uint _NewSubscr = DataListForSeler[msg.sender][_NumberOfData].NewSubscriptOfCustomerList;
+       uint _NewSubscr = Map_NumberToDataAttribute[msg.sender][_NumberOfData].NewSubscriptOfCustomerList;
        for(uint256 i = _NewSubscr;;i++){
-        if(block.timestamp - DataListForSeler[msg.sender][_NumberOfData].CustomerTimeList[i] > 86400){
+        if(block.timestamp - Map_NumberToDataAttribute[msg.sender][_NumberOfData].CustomerTimeList[i] > 86400){
             _NumberOfMoney++;
         }else {
             //更新新顾客下标
-            DataListForSeler[msg.sender][_NumberOfData].NewSubscriptOfCustomerList = i;
+            Map_NumberToDataAttribute[msg.sender][_NumberOfData].NewSubscriptOfCustomerList = i;        
+            //转钱给卖家
+        payable (msg.sender).transfer(_NumberOfMoney*Map_NumberToData[msg.sender][_NumberOfData].ValueOfData);
             break;
         }
-        //转钱给卖家
-        payable (msg.sender).transfer(_NumberOfMoney*DataListForSeler[msg.sender][_NumberOfData].ValueOfData);
+
         }
         return true;
         }
@@ -165,8 +216,10 @@ uint256 public  NumberOfTotalData;
             uint _NumberOfData
         )
         external returns(bool){
-            require(DataListForSeler[msg.sender][_NumberOfData].IsLockByDao == true, "data is arbitrating");
-            DataListForSeler[msg.sender][_NumberOfData].SelfDistroytime = block.timestamp;
+            require(Map_NumberToData[msg.sender][_NumberOfData].IsLockByDao == true, "data is arbitrating");
+
+            Map_NumberToData[msg.sender][_NumberOfData].IsLockBySeller = true;
+            Map_NumberToDataAttribute[msg.sender][_NumberOfData].SelfDistroytime = block.timestamp;
         }
 
 
@@ -176,16 +229,30 @@ uint256 public  NumberOfTotalData;
             uint256 _NumberOfData,
             string memory _Link
         )payable external returns(bool){
-            require(DataListForSeler[_Owner][_NumberOfData].IsLockByDao == false && 
-            block.timestamp - DataListForSeler[msg.sender][_NumberOfData].SelfDistroytime > 86400,"tnis data is already done");
+            require(Map_NumberToData[_Owner][_NumberOfData].IsLockByDao == false && 
+            block.timestamp - Map_NumberToDataAttribute[msg.sender][_NumberOfData].SelfDistroytime > 86400,"tnis data is already done");
             //提供对赌金 2倍售价
-            require(msg.value == DataListForSeler[_Owner][_NumberOfData].ValueOfData*2,"you do not pay enough for bond");
-            //锁合约，标注顾客身份
-            DataListForSeler[_Owner][_NumberOfData].IsLockByDao = true;
-            DataListForSeler[_Owner][_NumberOfData].AddressOfComplaint = msg.sender;
+            require(msg.value == Map_NumberToData[_Owner][_NumberOfData].ValueOfData*2,"you do not pay enough for bond");
+            //校验linkhash
+            require(bytes32(abi.encodePacked(Map_NumberOfData[_NumberOfData].Linkhash)) == keccak256(abi.encodePacked(_Link)));
 
-            //调用dao组织合约*
+            //锁合约，标注投诉顾客身份
+            Map_NumberToData[_Owner][_NumberOfData].IsLockByDao = true;
+            Map_NumberToDataAttribute[_Owner][_NumberOfData].AddressOfComplaint = msg.sender;
+            //加入映射
+            Map_addressTOBrbitratingdataNumber[msg.sender].push(_NumberOfData);
+            /**调用dao组织合约* 
 
+            Map_NumberToDataAttribute[msg.sender][_NumberOfData].AddressOfComplaint 
+            _link 
+            _NumberOfData 
+            Map_NumberToData[msg.sender][_NumberOfData].IntroduceOfData
+            */
+            // address (DaoOrganizationAddress).addProposal(_NumberOfData,_Owner,
+            // _Link,
+            // msg.sender,
+            // Map_NumberToData[_Owner][_NumberOfData].IntroduceOfData
+            // );
             return true;
         }
 
@@ -195,25 +262,109 @@ uint256 public  NumberOfTotalData;
             uint256 _NumberOfData,
             bool _IsDataTrue
         )payable external returns(bool){
-//            require(msg.sender == DaoOrganizationAddress);
-            uint256 _ValueOfData = DataListForSeler[_Owner][_NumberOfData].ValueOfData;
+            require(msg.sender == DaoOrganizationAddress);
+            uint256 _ValueOfData = Map_NumberToData[_Owner][_NumberOfData].ValueOfData;
             if(_IsDataTrue == false){
                 //返还对赌金
-            payable (DataListForSeler[_Owner][_NumberOfData].AddressOfComplaint).transfer(_ValueOfData*2);
+            payable (Map_NumberToDataAttribute[_Owner][_NumberOfData].AddressOfComplaint).transfer(_ValueOfData*2);
             //返还购买金额
             uint256 _NumberOfReturn =  this.Compute(_Owner,_NumberOfData);
-            uint256 _NewSubscriptOfCustomerList = DataListForSeler[_Owner][_NumberOfData].NewSubscriptOfCustomerList;
+            uint256 _NewSubscriptOfCustomerList = Map_NumberToDataAttribute[_Owner][_NumberOfData].NewSubscriptOfCustomerList;
 
-            for(uint i = _NewSubscriptOfCustomerList;;i++){
-                payable (DataListForSeler[_Owner][_NumberOfData].CustomerList[_NewSubscriptOfCustomerList]).transfer(_ValueOfData + _NumberOfReturn);
+            for(uint i = _NewSubscriptOfCustomerList;i < Map_NumberToDataAttribute[_Owner][_NumberOfData].TotalCustomer;i++){
+                payable (Map_NumberToDataAttribute[_Owner][_NumberOfData].CustomerList[i]).transfer(_ValueOfData + _NumberOfReturn);
             }
             }else{
-            DataListForSeler[_Owner][_NumberOfData].IsLockByDao = false;
+            Map_NumberToData[_Owner][_NumberOfData].IsLockByDao = false;
             }
             return true;
         }
-        
-        //查询NumberOfData
+
+        //分类查询
+        function FingTypeOfData(
+            uint256 _Type
+        )view  external returns(uint256[] memory){
+            if(_Type == 0){
+            return Type0;
+            }
+            if(_Type == 1){
+            return Type1;
+            }
+            if(_Type == 2){
+            return Type2;
+            }
+            if(_Type == 3){
+            return Type3;
+            }
+        }
+        //买家查询购买的加密link
+        function FindLink(
+            address  _Owner,
+            uint256 _NumberOfData
+        )view  external returns(string memory){
+            uint256 _CustomerNumberOfData;
+        for (uint256 i = 0; i < Map_NumberToDataAttribute[_Owner][_NumberOfData].CustomerList.length; i++) {
+        if (Map_NumberToDataAttribute[_Owner][_NumberOfData].CustomerList[i] == msg.sender) {
+            _CustomerNumberOfData = i;
+        }
+    }
+    if(bytes(Map_NumberToDataAttribute[_Owner][_NumberOfData].EncodeLinkList[_CustomerNumberOfData]).length == 0){
+        return "seller havent ship yet";
+    }
+    return Map_NumberToDataAttribute[_Owner][_NumberOfData].EncodeLinkList[_CustomerNumberOfData];
+        }
+
+        //查看卖家已经上架的
+        function FindSaledata(
+        )view  external returns(bool){
+            this.FindNumberOfData(Map_selleraddressTOdataNumber[msg.sender]);
+            return true;
+        }
+        //买家查询已经购买的
+         function FindCustomerdata(
+        )view  external returns(bool){
+            this.FindNumberOfData(Map_CustomeraddressTOdataNumber[msg.sender]);
+        }
+
+        //查询已经申诉的data
+        function Findarbitratingdata(
+        )view  external returns(bool){
+            this.FindNumberOfData(Map_addressTOBrbitratingdataNumber[msg.sender]);
+                return true;
+        }
+        //查询最新n个
+        function FindLastestdata(
+        )view  external returns(bool){
+            uint256[] memory LastData;
+            for(uint i = 0;i < 10;i++){
+                LastData[i] = NumberOfTotalData - i;
+            }
+            this.FindNumberOfData(LastData);
+            return true;
+        }
+
+        //根据number查询data 
+        function FindNumberOfData(
+            uint[] memory _NumberOfData
+        )view  external returns(uint[] memory,string[] memory,uint[] memory,string[] memory,string[] memory){
+            uint[] memory _NumberOfData;
+            string[] memory _NameOfData;
+            uint[] memory _ValueOfData;
+            string[] memory _PhotoOfData;
+            string[] memory _IntroduceOfData;
+            for(uint i = 0;i < _NumberOfData.length;i++){
+                _NumberOfData[i] = Map_NumberOfData[_NumberOfData[i]].NumberOfData;
+                _NameOfData[i] = Map_NumberOfData[_NumberOfData[i]].NameOfData;
+                _ValueOfData[i] = Map_NumberOfData[_NumberOfData[i]].ValueOfData;
+                _PhotoOfData[i] = Map_NumberOfData[_NumberOfData[i]].PhotoOfData;
+                _IntroduceOfData[i] = Map_NumberOfData[_NumberOfData[i]].IntroduceOfData;
+            }
+            return (_NumberOfData,_NameOfData,_ValueOfData,_PhotoOfData,_IntroduceOfData);
+        }
+
+
+
+        //查询NumberOfTotalData
         function FindNumberOfTotalData(
         )view  external returns(uint){
         return  NumberOfTotalData;
@@ -223,14 +374,15 @@ uint256 public  NumberOfTotalData;
             address  _Owner,
             uint256 _NumberOfData
         )view  external returns(string memory){
-        return  DataListForSeler[_Owner][_NumberOfData].Linkhash;
+        return  Map_NumberToData[_Owner][_NumberOfData].Linkhash;
         }
+
         //计算返还钱的数量
         function  Compute(
             address _Owner,
             uint256 _NumberOfData
         )view  external returns(uint){
-         return   DataListForSeler[_Owner][_NumberOfData].BondOfData/(DataListForSeler[_Owner][_NumberOfData].TotalCustomer - DataListForSeler[_Owner][_NumberOfData].NewSubscriptOfCustomerList);
+         return   Map_NumberToDataAttribute[_Owner][_NumberOfData].BondOfData/(Map_NumberToDataAttribute[_Owner][_NumberOfData].TotalCustomer - Map_NumberToDataAttribute[_Owner][_NumberOfData].NewSubscriptOfCustomerList);
         }
 
     }
