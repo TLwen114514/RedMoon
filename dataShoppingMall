@@ -365,13 +365,13 @@ struct Data{
         //根据number查询data 
         function FindNumberOfData(
             uint[] memory _NumberOfData
-        )view  external returns(uint[] memory,string[] memory,uint[] memory,string[] memory,string[] memory,string[] memory){
+        )view  external returns(uint[] memory,string[] memory,uint[] memory,string[] memory,string[] memory,address[] memory){
             uint[] memory _NumberOfData = new uint[](_NumberOfData.length);
             string[] memory _NameOfData =  new string[](_NumberOfData.length);
             uint[] memory _ValueOfData =  new uint[](_NumberOfData.length);
             string[] memory _PhotoOfData =  new string[](_NumberOfData.length);
             string[] memory _IntroduceOfData =  new string[](_NumberOfData.length);
-            string[] memory _Owner = new  string[](_NumberOfData.length);
+            address[] memory _Owner = new address[](_NumberOfData.length);
             for(uint i = 0;i < _NumberOfData.length;i++){
                 _NumberOfData[i] = Map_NumberOfData[_NumberOfData[i]].NumberOfData;
                 _NameOfData[i] = Map_NumberOfData[_NumberOfData[i]].NameOfData;
