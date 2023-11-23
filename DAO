@@ -1,0 +1,151 @@
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.9;
+
+import "./interface/IDAO.sol";
+import "./interface/Imain.sol";
+
+contract DAO {
+    mapping(address => bool) members;
+    uint256 constant memberFee = 1 ether;
+    uint256 totalMember;
+
+    uint256[] undecidedProposal;
+
+    uint256 constant judgeTime = 3 days;
+
+    mapping(uint => proposal) proposals;
+
+    struct proposal {
+        uint256 id;
+        address owner;
+        string link;
+        address[] agreeAddress;
+        address[] disagreeAddress;
+        uint256 ddl;
+        bool result;
+        address questionAddress;
+        string introduceOfData;
+    }
+
+    address owner;
+    address main;
+
+    constructor(address _main) {
+        owner = msg.sender;
+        main = _main;
+    }
+
+    modifier onlyOwner() {
+        require(msg.sender == owner);
+        _;
+    }
+
+    modifier onlyMain() {
+        require(msg.sender == main);
+        _;
+    }
+
+    function addMember() external payable returns (bool) {
+        require(msg.value == memberFee);
+        require(!members[msg.sender], "Already a member");
+        members[msg.sender] = true;
+
+        totalMember++;
+        return true;
+    }
+
+    function removeMember() external returns (bool) {
+        require(members[msg.sender], "Not a member");
+        members[msg.sender] = false;
+        payable(msg.sender).transfer(memberFee);
+        return true;
+    }
+
+    function checkBalance() public view returns (uint256) {
+        return address(this).balance;
+    }
+
+    function withdraw() external onlyOwner {
+        payable(msg.sender).transfer(address(this).balance);
+    }
+
+    function addProposal(
+        uint256 numberOfData,
+        address _owner,
+        string memory link,
+        address question,
+        string memory _introduceOfData
+    ) external onlyMain returns (bool) {
+        undecidedProposal.push(numberOfData);
+        proposals[numberOfData].link = link;
+        proposals[numberOfData].id = numberOfData;
+        proposals[numberOfData].ddl = block.timestamp + judgeTime;
+        proposals[numberOfData].questionAddress = question;
+        proposals[numberOfData].owner = _owner;
+        proposals[numberOfData].introduceOfData = _introduceOfData;
+        // uint256[] memory _numberOfData;
+        // _numberOfData[0] = numberOfData;
+        // Imain(main).FindNumberOfData(_numberOfData);
+        return true;
+    }
+
+    function getTotalProposalNumber() external view returns (uint[] memory) {
+        return undecidedProposal;
+    }
+
+    function judge(uint number, bool decide) external returns (bool) {
+        require(members[msg.sender]);
+        require(proposals[number].ddl >= block.timestamp);
+        if (decide == true) {
+            proposals[number].agreeAddress.push(msg.sender);
+        } else {
+            proposals[number].disagreeAddress.push(msg.sender);
+        }
+        if (
+            proposals[number].agreeAddress.length >=
+            proposals[number].disagreeAddress.length
+        ) {
+            proposals[number].result = true;
+        } else {
+            proposals[number].result = false;
+        }
+        return true;
+    }
+
+    function getResult(uint256 numberOfData) external returns (bool) {
+        require(msg.sender == proposals[numberOfData].questionAddress);
+        address _owner = proposals[numberOfData].owner;
+        bool _isDataTrue = proposals[numberOfData].result;
+        Imain(main).DaoDeciding(_owner, numberOfData, _isDataTrue);
+        for (uint i = 0; i < undecidedProposal.length; i++) {
+            if (undecidedProposal[i] == numberOfData) {
+                undecidedProposal[i] = undecidedProposal[
+                    undecidedProposal.length - 1
+                ];
+                undecidedProposal.pop();
+            }
+        }
+        return _isDataTrue;
+    }
+
+    struct showStruct {
+        uint256 id;
+        string link;
+        uint256 ddl;
+        string introduce;
+    }
+
+    function getTotalProposal()
+        external
+        view
+        returns (showStruct[] memory _show)
+    {
+        for (uint i = 0; i < undecidedProposal.length; i++) {
+            uint256 number = undecidedProposal[i];
+            _show[i].id = proposals[number].id;
+            _show[i].link = proposals[number].link;
+            _show[i].ddl = proposals[number].ddl;
+            _show[i].introduce = proposals[number].introduceOfData;
+        }
+    }
+}
